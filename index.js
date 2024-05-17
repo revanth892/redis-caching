@@ -3,22 +3,24 @@ const axios = require('axios')
 const app = express();
 const PORT = 6060;
 
-const fetchApiData =async(species)=>{
+
+
+const fetchApiData =async(pin)=>{
     const apiResponse = await axios.get(
-        `https://www.fishwatch.gov/api/species/${species}`
+        `http://api.zippopotam.us/us/${pin}`
     );
     console.log("Request sent to the API")
-    console.log(apiResponse.data)
+    // console.log(apiResponse.data)
     return apiResponse.data
 }
 
-const getSpeciesData=async(req,res)=>
+const getPinData=async(req,res)=>
 {
-    const species = req.params.species;
+    const pin = req.params.pin;
   let results;
 
   try {
-    results = await fetchApiData(species);
+    results = await fetchApiData(pin);
     if (results.length === 0) {
       throw "API returned an empty array";
     }
@@ -33,7 +35,7 @@ const getSpeciesData=async(req,res)=>
 }
 
 
-app.get("/fish/:species", getSpeciesData);
+app.get("/us/:pin", getPinData);
 
 app.listen(PORT,()=>{
     console.log('server is running')
